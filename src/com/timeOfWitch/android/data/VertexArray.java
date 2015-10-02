@@ -8,14 +8,14 @@
 ***/
 package com.timeOfWitch.android.data;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glVertexAttribPointer;
 import static com.timeOfWitch.android.Constants.BYTES_PER_FLOAT;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 public class VertexArray {    
 

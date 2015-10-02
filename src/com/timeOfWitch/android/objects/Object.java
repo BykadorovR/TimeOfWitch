@@ -1,6 +1,7 @@
 package com.timeOfWitch.android.objects;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.timeOfWitch.android.Initialization;
 import com.timeOfWitch.android.data.Camera;
@@ -18,6 +19,7 @@ import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform1f;
+import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glUseProgram;
 import static android.opengl.GLES20.glVertexAttribPointer;
@@ -188,7 +190,11 @@ public class Object {
         }
     }
     public boolean needToDisplay() {
-        return Math.abs(camera.getCameraX() - x) <= camera.getCameraWidth() / 2 + getWidth() / 2;
+        if (Math.abs(camera.getCameraX()-x) > camera.getCameraWidth()/2 + getWidth()/2) {
+            return false;
+        } else {
+            return true;
+        }
 
     }
 

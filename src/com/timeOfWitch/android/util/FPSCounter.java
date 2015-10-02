@@ -1,5 +1,5 @@
 package com.timeOfWitch.android.util;
-
+import android.util.Log;
 public class FPSCounter {
 long startTime = System.nanoTime();
 int frames = 0;

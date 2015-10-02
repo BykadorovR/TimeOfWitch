@@ -10,6 +10,7 @@ package com.timeOfWitch.android.util;
 
 import android.util.FloatMath;
 
+import com.timeOfWitch.android.objects.Object;
 import com.timeOfWitch.android.objects.Sprite;
 
 public class Geometry {
