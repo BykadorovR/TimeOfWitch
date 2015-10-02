@@ -1,30 +1,43 @@
 package com.timeOfWitch.android.objects;
-
-import android.content.Context;
-import android.graphics.Color;
-
-import com.timeOfWitch.android.R;
-import com.timeOfWitch.android.util.Geometry.Point;
-import com.timeOfWitch.android.util.Geometry.Vector;
-import com.timeOfWitch.android.util.ShaderHelper;
-import com.timeOfWitch.android.util.TextResourceReader;
-
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
+import static android.opengl.GLES20.glVertexAttribPointer;
+import static com.timeOfWitch.android.Constants.BYTES_PER_FLOAT;
+import static com.timeOfWitch.android.Constants.PARTICLE_START_TIME_COMPONENT_COUNT;
+import static com.timeOfWitch.android.Constants.STRIDE;
+import static com.timeOfWitch.android.Constants.STRIDE_PARTICLE;
+import static com.timeOfWitch.android.Constants.VECTOR_COMPONENT_COUNT;
+import static com.timeOfWitch.android.Constants.COLOR_COMPONENT_COUNT;
+import static com.timeOfWitch.android.Constants.POSITION_COMPONENT_COUNT;
+import static com.timeOfWitch.android.Constants.TOTAL_COMPONENT_COUNT;
+import static com.timeOfWitch.android.Constants.STRIDE_PARTICLE;
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+import static android.opengl.GLES20.glUseProgram;
+import static android.opengl.GLES20.glVertexAttribPointer;
+import static android.opengl.Matrix.multiplyMM;
+import static android.opengl.Matrix.scaleM;
+import static android.opengl.Matrix.setIdentityM;
+import static android.opengl.Matrix.translateM;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glGetAttribLocation;
-import static android.opengl.GLES20.glGetUniformLocation;
-import static android.opengl.GLES20.glVertexAttribPointer;
-import static com.timeOfWitch.android.Constants.BYTES_PER_FLOAT;
-import static com.timeOfWitch.android.Constants.COLOR_COMPONENT_COUNT;
-import static com.timeOfWitch.android.Constants.PARTICLE_START_TIME_COMPONENT_COUNT;
-import static com.timeOfWitch.android.Constants.POSITION_COMPONENT_COUNT;
-import static com.timeOfWitch.android.Constants.STRIDE_PARTICLE;
-import static com.timeOfWitch.android.Constants.TOTAL_COMPONENT_COUNT;
-import static com.timeOfWitch.android.Constants.VECTOR_COMPONENT_COUNT;
+import com.timeOfWitch.android.R;
+import com.timeOfWitch.android.data.VertexArray;
+import com.timeOfWitch.android.util.ShaderHelper;
+import com.timeOfWitch.android.util.TextResourceReader;
+import com.timeOfWitch.android.util.Geometry.Point;
+import com.timeOfWitch.android.util.Geometry.Vector;
+
+import android.content.Context;
+import android.graphics.Color;
 
 public class ParticleSystem {
     // Uniform constants

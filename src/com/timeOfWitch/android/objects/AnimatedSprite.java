@@ -9,10 +9,22 @@ import com.timeOfWitch.android.data.Texture;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform1f;
 import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+import static android.opengl.GLES20.glUseProgram;
+import static android.opengl.GLES20.glVertexAttribPointer;
+import static android.opengl.Matrix.multiplyMM;
+import static android.opengl.Matrix.setIdentityM;
 import static com.timeOfWitch.android.Constants.BYTES_PER_FLOAT;
+import static com.timeOfWitch.android.Constants.POSITION_COMPONENT_COUNT;
+import static com.timeOfWitch.android.Constants.STRIDE;
+import static com.timeOfWitch.android.Constants.TEXTURE_COORDINATES_COMPONENT_COUNT;
 
 public class AnimatedSprite extends Object {
 

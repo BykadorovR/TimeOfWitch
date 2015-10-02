@@ -1,11 +1,11 @@
 package com.timeOfWitch.android.data;
 
+import com.timeOfWitch.android.util.TextureHelper;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-
-import com.timeOfWitch.android.util.TextureHelper;
 
 public class TextureAtlas {
     public int width;

@@ -9,9 +9,10 @@ import com.timeOfWitch.android.data.Texture;
 import com.timeOfWitch.android.data.TextureAtlas;
 import com.timeOfWitch.android.objects.AnimatedSprite;
 import com.timeOfWitch.android.objects.Background;
-import com.timeOfWitch.android.objects.Object;
 import com.timeOfWitch.android.objects.Sprite;
+import com.timeOfWitch.android.objects.Object;
 import com.timeOfWitch.android.util.FPSCounter;
+
 import com.timeOfWitch.android.util.Geometry;
 import com.timeOfWitch.android.util.TextureHelper;
 
@@ -20,6 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_GENERATE_MIPMAP_HINT;
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
 import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
@@ -207,6 +209,7 @@ public class Render implements Renderer {
                 _goMove = false;
                 if (camera.needMove() == true)
                     camera.needMove(false);
+;
                 _setAnimateMove = false;
                 aliseSprite.setAnimate(new int[]{1}, new int[]{15});
             }
@@ -224,34 +227,24 @@ public class Render implements Renderer {
 
 
     }
-
-    private int countOfTextures = 0;
+    private int textureId = 0;
+    private boolean checkTexture = false;
     private void setSequenceAndPositionForBack() {
-        Log.d("myLogs", countOfTextures + "");
-        if (Math.abs (camera.getCameraX()  - back[0].getX() - back[0].getWidth()/2) < speedX) {
-            countOfTextures--;
-            if (countOfTextures == 2) {
-                back[3].changeTexture(desert2);
-            } else {
-                if (back[3].getTexture().resourceId == desert2.resourceId) {
-                    back[3].changeTexture(desert);
-                }
-            }
 
+        if (Math.abs (camera.getCameraX()  - back[0].getX() - back[0].getWidth()/2) < speedX) {
             back[3].translate(back[0].getX() - back[0].getWidth(), back[3].getY());
             back = Geometry.shiftToRight(back, 1);
+            if (back[0].getTexture().resourceId == desert2.resourceId) {
+                checkTexture = false;
+                back[0].changeTexture(desert);
+            }
         }
         if (Math.abs (camera.getCameraX()  - back[3].getX() + back[3].getWidth()/2) < speedX) {
-            countOfTextures++;
-            if (countOfTextures == 2) {
-                back[0].changeTexture(desert2);
-            } else {
-                if (back[0].getTexture().resourceId == desert2.resourceId) {
-                    back[0].changeTexture(desert);
-                }
-            }
-
             back[0].translate(back[3].getX() + back[3].getWidth(), back[0].getY());
+            if (Math.abs(aliseSprite.getXWithCamera()) > 1300  && checkTexture == false) {
+                checkTexture = true;
+                back[0].changeTexture(desert2);
+            }
             back = Geometry.shiftToLeft(back, 1);
         }
 

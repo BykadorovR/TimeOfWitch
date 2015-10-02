@@ -1,17 +1,14 @@
 package com.timeOfWitch.android.util;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-
-import com.timeOfWitch.android.data.Texture;
-import com.timeOfWitch.android.data.TextureAtlas;
-
 import static android.opengl.GLES20.GL_LINEAR;
 import static android.opengl.GLES20.GL_LINEAR_MIPMAP_LINEAR;
+import static android.opengl.GLES20.GL_REPEAT;
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
 import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_S;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_T;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteTextures;
@@ -19,6 +16,11 @@ import static android.opengl.GLES20.glGenTextures;
 import static android.opengl.GLES20.glGenerateMipmap;
 import static android.opengl.GLES20.glTexParameteri;
 import static android.opengl.GLUtils.texImage2D;
+import android.content.Context;
+import android.graphics.Bitmap;
+
+import com.timeOfWitch.android.data.Texture;
+import com.timeOfWitch.android.data.TextureAtlas;
 
 public class TextureHelper {
     private int[] textureObjectIds;

@@ -1,7 +1,13 @@
 package com.timeOfWitch.android.data;
 
 import static android.opengl.Matrix.setIdentityM;
+import static android.opengl.Matrix.setLookAtM;
 import static android.opengl.Matrix.translateM;
+import static android.opengl.Matrix.orthoM;
+
+import android.util.Log;
+
+import com.timeOfWitch.android.Initialization;
 
 public class Camera {
     float[] camera;

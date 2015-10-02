@@ -8,6 +8,8 @@
 ***/
 package com.timeOfWitch.android;
 
+import com.timeOfWitch.android.util.TouchHelper;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -16,13 +18,12 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Toast;
-
-import com.timeOfWitch.android.util.TouchHelper;
 
 
 

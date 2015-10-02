@@ -1,5 +1,7 @@
 package com.timeOfWitch.android.util;
 
+import android.util.Log;
+
 import com.timeOfWitch.android.Render;
 
 public class TouchHelper {
@@ -12,7 +14,7 @@ public class TouchHelper {
         
         for (int i=0; i<2; i++)
             for (int j=0; j<2; j++){
-                TouchHelper.down[i][j] = down[i][j];
+                this.down[i][j] = down[i][j];
 //                Log.d("myLogs", down[i][j]+ " ");
             }
         render.down(finger);
@@ -23,7 +25,7 @@ public class TouchHelper {
        
         for (int i=0; i<2; i++)
           for (int j=0; j<2; j++){
-              TouchHelper.up[i][j]=up[i][j];
+              this.up[i][j]=up[i][j];
 //              Log.d("myLogs", up[i][j]+ " ");
           }
         render.up(finger);
@@ -34,7 +36,7 @@ public class TouchHelper {
         
         for (int i=0; i<2; i++)
           for (int j=0; j<2; j++){
-              TouchHelper.drag[i][j] = drag[i][j];
+              this.drag[i][j] = drag[i][j];
 //              Log.d("myLogs", drag[i][j]+ " ");
           }
         render.drag(finger);
