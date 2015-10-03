@@ -154,14 +154,14 @@ public class Render implements Renderer {
         skySprites.attachBackground();
 
 
-        homeSprite = new Sprite(context, back[3].getWidth() / 2 + back[3].getWidth() * 4, Initialization.height*0.21f, 512*0.7f,505*0.7f, home, camera);
+        homeSprite = new Sprite(context, Initialization.width, Initialization.height*0.21f, 512*0.7f,505*0.7f, home, camera);
 
         homeSprite.attachSprite();
 
-        treeS = new Sprite(context, Initialization.width / 3, back[0].getY() - back[0].getHeight() / 2, 300, 458, tree, camera);
+        treeS = new Sprite(context, Initialization.width/ 1.2f, back[0].getY() - back[0].getHeight() / 1.5f, tree.width/1.5f, tree.height/1.5f, tree, camera);
 
 
-        treeS2 = new Sprite(context, Initialization.width, back[0].getY(), 300, 458, tree, camera);
+        treeS2 = new Sprite(context, Initialization.width, back[0].getY(), tree.width/2, tree.height/2, tree, camera);
 
 
         treeS.translate(treeS.getX(), treeS.getY() + treeS.getHeight() / 2);
