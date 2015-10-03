@@ -120,6 +120,7 @@ public class Object {
             multiplyMM(matrix, 0, camera.getCamera(), 0, matrix, 0);
             glUniformMatrix4fv(uMatrixLocation, 1, false, matrix, 0);
         } else {
+            doParallax();
             multiplyMM(matrix, 0, translateMatrix, 0, rotateMatrix, 0);
             multiplyMM(matrix, 0, scaleMatrix, 0, matrix, 0);
             glUniformMatrix4fv(uMatrixLocation, 1, false, matrix, 0);
