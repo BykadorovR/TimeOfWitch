@@ -11,6 +11,7 @@ import com.timeOfWitch.android.Initialization;
 
 public class Camera {
     float[] camera;
+    public float startX, startY;
     private boolean needOfMovement;
     private float xCameraN;
     private float diff = 0;
@@ -25,7 +26,8 @@ public class Camera {
         needOfMovement = true;
         this.cameraWidth = cameraWidth;
         this.cameraHeight = cameraHeight;
-
+        startX = posX;
+        startY = posY;
         setCameraPosition(posX,posY);
 
     }
