@@ -65,6 +65,7 @@ public class Object {
     protected float posXInAtlasN;
     protected float posYInAtlasN;
     protected Camera camera;
+    protected float scale = Initialization.height/540f;
 
     protected float[] matrix = new float[16];
     protected float[] scaleMatrix = new float[16];
@@ -83,8 +84,8 @@ public class Object {
         this.transparency = 1f;
         this.visibility = true;
         this.texture = texture;
-        this.heightN = height / Initialization.height;
-        this.widthN = width / Initialization.width;
+        this.heightN = scale*height / Initialization.height;
+        this.widthN =  scale*width / Initialization.width;
         setIdentityM(translateMatrix,0);
         setIdentityM(scaleMatrix, 0);
         setIdentityM(parallaxMatrix, 0);
