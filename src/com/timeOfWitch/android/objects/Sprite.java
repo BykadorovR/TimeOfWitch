@@ -41,6 +41,7 @@ public class Sprite extends Object {
     public Sprite(Context context, float x, float y, float width, float height, Texture texture, Camera camera) {
         super(context, x, y, width, height, texture, camera);
         atlas = texture.atlas;
+        super.x *= scale;
         super.width = (float) texture.width / (float) atlas.width; //512/2048
         super.height = (float) texture.height / (float) atlas.height; //512/2048
         super.posXInAtlasN = (float) texture.posXInAtlas / (float) atlas.width; // = 513/2048

@@ -21,9 +21,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
-import static android.opengl.GLES20.GL_GENERATE_MIPMAP_HINT;
+import static android.opengl.GLES20.GL_ONE;
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
-import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
@@ -79,6 +78,7 @@ public class Render implements Renderer {
     private Background skySprites;
     private Background green;
     private Sprite grassSprite;
+    private float scale = Initialization.height/540f;
 
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
@@ -120,54 +120,53 @@ public class Render implements Renderer {
 
         atlas3.loadAtlas();
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         camera = new Camera(Initialization.width, Initialization.height, Initialization.width / 2, Initialization.height / 2);
         camera.needMove(false);
 
 
         back = new Sprite[4];
         for (int i=0; i<4; i++) {
-            back[i] = new Sprite(context, i * Initialization.width/2, 0, Initialization.width / 2, desert.height / 2, desert, camera);
+            back[i] = new Sprite(context, i * desert.width/2, 0, desert.width/2, desert.height / 2, desert, camera);
             back[i].translate(back[i].getX(), back[i].getY() + back[i].getHeight() / 2);
             back[i].attachSprite();
         }
         backg = new Sprite[4];
         for (int i=0; i<4; i++) {
-            backg[i] = new Sprite(context, i * Initialization.width/2, Initialization.height *0.075f, Initialization.width / 2, grass.height / 2, grass, camera);
+            backg[i] = new Sprite(context, i * grass.width/2, Initialization.height *0.15f, grass.width/2, grass.height / 2, grass, camera);
             backg[i].translate(backg[i].getX(), backg[i].getY() + backg[i].getHeight() / 2);
             backg[i].attachSprite();
         }
 
-        aliseSprite = new AnimatedSprite(context, Initialization.width / 2, back[0].getY() + back[0].getHeight() / 2, 100, 196, alise, camera);
+        aliseSprite = new AnimatedSprite(context, Initialization.width / 2, Initialization.height *0.27f, 100, 196, alise, camera);
         aliseSprite.setAnimate(new int[]{1}, new int[]{15});
         aliseSprite.attachHUDAnimatedSprite();
         aliseSprite.rotate(0, 0, 1, 0);
 
-        green = new Background(context, Initialization.width / 2, Initialization.height *0.18f, Initialization.width , greenBack.height, greenBack, camera);
+        green = new Background(context, Initialization.width / 2, Initialization.height *0.35f, Initialization.width /scale, greenBack.height, greenBack, camera);
 
         green.attachBackground();
 
 
 
-        skySprites = new Background(context, Initialization.width / 2, Initialization.height / 2, Initialization.width, Initialization.height, sky, camera);
+        skySprites = new Background(context, Initialization.width / 2, Initialization.height / 2, Initialization.width/scale, Initialization.height/scale, sky, camera);
         skySprites.setSpeedOfSlide(getSpeedForParallax(skySprites, 1));
         skySprites.attachBackground();
 
 
-        homeSprite = new Sprite(context, Initialization.width, Initialization.height*0.21f, 512*0.7f,505*0.7f, home, camera);
+        homeSprite = new Sprite(context, 1000, Initialization.height*0.41f, home.width * 0.7f,home.height * 0.7f, home, camera);
 
-        homeSprite.attachSprite();
-
-        treeS = new Sprite(context, Initialization.width/ 1.2f, back[0].getY() - back[0].getHeight() / 1.5f, tree.width/1.5f, tree.height/1.5f, tree, camera);
+        treeS = new Sprite(context, 1000/ 1.2f, Initialization.height*0.54f, tree.width/1.5f, tree.height/1.5f, tree, camera);
 
 
-        treeS2 = new Sprite(context, Initialization.width, back[0].getY(), tree.width/2, tree.height/2, tree, camera);
+        treeS2 = new Sprite(context, 1000, Initialization.height*0.53f, tree.width/2, tree.height/2, tree, camera);
 
-
-        treeS.translate(treeS.getX(), treeS.getY() + treeS.getHeight() / 2);
-        treeS2.translate(treeS2.getX(), treeS2.getY() + treeS2.getHeight() / 2);
+        homeSprite.translate(homeSprite.getX(), homeSprite.getY());
+        treeS.translate(treeS.getX(), treeS.getY());
+        treeS2.translate(treeS2.getX(), treeS2.getY());
         treeS.attachSprite();
         treeS2.attachSprite();
+        homeSprite.attachSprite();
 
         textureHelper.useTextureAtlas(atlas1);
         textureHelper.useTexture(greenBack);
@@ -228,7 +227,7 @@ public class Render implements Renderer {
 
     private boolean _goMove;
     private boolean _setAnimateMove;
-    private float speedX = 3;
+    private float speedX = 3 * scale;
     private int signMove;
 
     @Override
@@ -360,13 +359,13 @@ public class Render implements Renderer {
 
         return 8*(-aliseSprite.getY()+aliseSprite.getHeight()/2 +
                 object.getY()-object.getHeight()/2)
-                / Initialization.height;
+                / 1080f;
     }
     public float getSpeedForParallax(Object object, int direction) {
 
         return direction*8*(-aliseSprite.getY()+aliseSprite.getHeight()/2 +
                 object.getY()-object.getHeight()/2)
-                / Initialization.height;
+                / 1080f;
     }
 
 
