@@ -21,17 +21,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
-import static android.opengl.GLES20.GL_FALSE;
-import static android.opengl.GLES20.GL_GENERATE_MIPMAP_HINT;
 import static android.opengl.GLES20.GL_ONE;
-import static android.opengl.GLES20.GL_ONE_MINUS_CONSTANT_ALPHA;
-import static android.opengl.GLES20.GL_ONE_MINUS_DST_ALPHA;
 import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
-import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
-import static android.opengl.GLES20.glDepthMask;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
 import static com.timeOfWitch.android.util.TouchHelper.up;
@@ -160,12 +154,12 @@ public class Render implements Renderer {
         skySprites.attachBackground();
 
 
-        homeSprite = new Sprite(context, Initialization.width, Initialization.height*0.41f, home.width * 0.7f,home.height * 0.7f, home, camera);
+        homeSprite = new Sprite(context, 1000, Initialization.height*0.41f, home.width * 0.7f,home.height * 0.7f, home, camera);
 
-        treeS = new Sprite(context, Initialization.width/ 1.2f, Initialization.height*0.54f, tree.width/1.5f, tree.height/1.5f, tree, camera);
+        treeS = new Sprite(context, 1000/ 1.2f, Initialization.height*0.54f, tree.width/1.5f, tree.height/1.5f, tree, camera);
 
 
-        treeS2 = new Sprite(context, Initialization.width, Initialization.height*0.53f, tree.width/2, tree.height/2, tree, camera);
+        treeS2 = new Sprite(context, 1000, Initialization.height*0.53f, tree.width/2, tree.height/2, tree, camera);
 
         homeSprite.translate(homeSprite.getX(), homeSprite.getY());
         treeS.translate(treeS.getX(), treeS.getY());
