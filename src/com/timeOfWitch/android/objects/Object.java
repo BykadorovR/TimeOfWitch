@@ -75,7 +75,7 @@ public class Object {
 
 
     protected Object(Context context, float x, float y, float width, float height, Texture texture, Camera camera) {
-        this.x = x;
+        this.x = x*scale;
         this.y = y;
         this.parallax = 0;
         this.context = context;
@@ -91,8 +91,7 @@ public class Object {
         setIdentityM(parallaxMatrix, 0);
         setIdentityM(rotateMatrix, 0);
 
-
-        setStartPosition(x, y);
+        setStartPosition(x*scale, y);
     }
 
     public void attach(int fragmentShader, int vertexShader) {
