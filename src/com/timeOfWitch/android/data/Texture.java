@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import com.timeOfWitch.android.Render;
 import com.timeOfWitch.android.util.TextureHelper;
 
 public class Texture {
@@ -42,7 +43,7 @@ public class Texture {
         this.resourceId = resourceId;
     }
 
-    public void loadTexture(Context context, int textureUnit) {
+    public void loadTexture(int textureUnit) {
         this.textureUnit = textureUnit;
         textureHelper = new TextureHelper();
         //Initialize empty bitmap with size as a texture
@@ -52,10 +53,10 @@ public class Texture {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         //loading picture from texture id
-        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
+        final Bitmap bitmap = BitmapFactory.decodeResource(Render.context.getResources(), resourceId, options);
         //draw on canvas (textureBitmap)
         canvas.drawBitmap(bitmap, 0, 0, null);
-        texture = textureHelper.loadTexture(context, textureBitmap);
+        texture = textureHelper.loadTexture(textureBitmap);
     }
 
     public int getLoadedTexture(){

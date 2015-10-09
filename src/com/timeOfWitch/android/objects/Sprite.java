@@ -31,6 +31,7 @@ import android.util.Log;
 import com.timeOfWitch.android.Initialization;
 import com.timeOfWitch.android.R;
 import com.timeOfWitch.android.data.Camera;
+import com.timeOfWitch.android.data.Scene;
 import com.timeOfWitch.android.data.Texture;
 import com.timeOfWitch.android.data.TextureAtlas;
 import com.timeOfWitch.android.util.ShaderHelper;
@@ -38,8 +39,8 @@ import com.timeOfWitch.android.util.TextResourceReader;
 
 public class Sprite extends Object {
 
-    public Sprite(Context context, float x, float y, float width, float height, Texture texture, Camera camera) {
-        super(context, x, y, width, height, texture, camera);
+    public Sprite(Scene scene, float x, float y, float width, float height, Texture texture, Camera camera) {
+        super(scene, x, y, width, height, texture, camera);
         atlas = texture.atlas;
         super.width = (float) texture.width / (float) atlas.width; //512/2048
         super.height = (float) texture.height / (float) atlas.height; //512/2048
@@ -63,22 +64,13 @@ public class Sprite extends Object {
             .asFloatBuffer()
             .put(vertex_data);
     }
-
-    public boolean drawIfVisible(){
+    //TODO: Send to Object and rename to draw (add checking for HUD, if HUD when return false
+    public void draw() {
         if (needToDisplay()) {
             setProgram();
             glUniform1i(uTextureUnitLocation, atlas.getTextureUnit());
             super.draw();
-            return true;
-        } else {
-            return false;
         }
-    }
-
-    public void draw() {
-        setProgram();
-        glUniform1i(uTextureUnitLocation, atlas.getTextureUnit());
-        super.draw();
     }
 
     public void attachSprite(){

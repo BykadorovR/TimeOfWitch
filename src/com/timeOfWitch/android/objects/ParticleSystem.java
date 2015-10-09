@@ -30,6 +30,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import com.timeOfWitch.android.R;
+import com.timeOfWitch.android.Render;
 import com.timeOfWitch.android.data.VertexArray;
 import com.timeOfWitch.android.util.ShaderHelper;
 import com.timeOfWitch.android.util.TextResourceReader;
@@ -76,9 +77,9 @@ public class ParticleSystem {
     private Context context;
     private int program;
 
-    public ParticleSystem(Context context, Point position,Vector direction,int color, int maxParticleCount) {
+    public ParticleSystem(Point position,Vector direction,int color, int maxParticleCount) {
         
-        this.context = context;
+        this.context = Render.context;
         this.maxParticleCount = maxParticleCount;
         this.position=position;
         this.direction=direction;
