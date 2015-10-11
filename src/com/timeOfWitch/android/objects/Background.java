@@ -28,6 +28,7 @@ import android.util.Log;
 import com.timeOfWitch.android.Initialization;
 import com.timeOfWitch.android.R;
 import com.timeOfWitch.android.data.Camera;
+import com.timeOfWitch.android.data.Scene;
 import com.timeOfWitch.android.data.Texture;
 import com.timeOfWitch.android.data.TextureAtlas;
 import com.timeOfWitch.android.util.ShaderHelper;
@@ -41,8 +42,8 @@ public class Background extends Object {
     private int uSlideLocation;
     private String U_SLIDE = "u_Slide";
 
-    public Background(Context context, float x, float y, float width, float height, Texture texture, Camera camera) {
-        super(context, x, y, width, height, texture, camera);
+    public Background(Scene scene, float x, float y, float width, float height, Texture texture, Camera camera) {
+        super(scene, x, y, width, height, texture, camera);
         super.width = 1;
         super.height = 1;
         super.widthN /= scale;

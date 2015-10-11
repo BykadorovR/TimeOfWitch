@@ -24,7 +24,7 @@ import com.timeOfWitch.android.data.TextureAtlas;
 
 public class TextureHelper {
     private int[] textureObjectIds;
-    public int loadTexture(Context context, Bitmap bitmap) {
+    public int loadTexture(Bitmap bitmap) {
         textureObjectIds = new int[1];
         //the first argument is the number of ids you want to generate, the second an array of ids, the 3rd the start index in the array where the generated ids are stored
         glGenTextures(1, textureObjectIds, 0);

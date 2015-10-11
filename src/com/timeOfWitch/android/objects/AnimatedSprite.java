@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.timeOfWitch.android.R;
 import com.timeOfWitch.android.data.Camera;
+import com.timeOfWitch.android.data.Scene;
 import com.timeOfWitch.android.data.Texture;
 
 import java.nio.ByteBuffer;
@@ -48,8 +49,8 @@ public class AnimatedSprite extends Object {
     private String U_ADJUST_Y = "u_AdjustY";
 
 
-    public AnimatedSprite(Context context, float x, float y, float width, float height, Texture texture, Camera camera) {
-        super(context, x, y, width, height, texture, camera);
+    public AnimatedSprite(Scene scene, float x, float y, float width, float height, Texture texture, Camera camera) {
+        super(scene, x, y, width, height, texture, camera);
         atlas = texture.atlas;
         super.width = (float) texture.width / (float) atlas.width; //512/2048
         super.height = (float) texture.height / (float) atlas.height; //512/2048

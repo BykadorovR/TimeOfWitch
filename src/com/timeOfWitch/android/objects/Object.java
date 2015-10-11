@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.timeOfWitch.android.Initialization;
+import com.timeOfWitch.android.Render;
 import com.timeOfWitch.android.data.Camera;
+import com.timeOfWitch.android.data.Scene;
 import com.timeOfWitch.android.data.Texture;
 import com.timeOfWitch.android.data.TextureAtlas;
 import com.timeOfWitch.android.util.ShaderHelper;
@@ -74,11 +76,11 @@ public class Object {
     protected float[] parallaxMatrix = new float[16];
 
 
-    protected Object(Context context, float x, float y, float width, float height, Texture texture, Camera camera) {
+    protected Object(Scene scene, float x, float y, float width, float height, Texture texture, Camera camera) {
         this.x = x;
         this.y = y;
         this.parallax = 0;
-        this.context = context;
+        this.context = Render.context;
         this.textureColumn = texture.column;
         this.camera = camera;
         this.transparency = 1f;

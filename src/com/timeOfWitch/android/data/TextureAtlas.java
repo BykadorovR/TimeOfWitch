@@ -1,5 +1,6 @@
 package com.timeOfWitch.android.data;
 
+import com.timeOfWitch.android.Render;
 import com.timeOfWitch.android.util.TextureHelper;
 
 import android.content.Context;
@@ -18,8 +19,8 @@ public class TextureAtlas {
     private int texture;
     private int textureUnit;
     
-    public TextureAtlas(Context context, int width, int height, int textureUnit) {
-        this.context = context;
+    public TextureAtlas(int width, int height, int textureUnit) {
+        this.context = Render.context;
         this.width = width;
         this.height = height;
         this.textureUnit = textureUnit;
@@ -39,7 +40,7 @@ public class TextureAtlas {
     
 
     public void loadAtlas(){
-        texture = textureHelper.loadTexture(context, textureAtlas);
+        texture = textureHelper.loadTexture(textureAtlas);
     }
     
 
