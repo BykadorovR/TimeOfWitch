@@ -46,8 +46,11 @@ public class Background extends Object {
         super(scene, x, y, width, height, texture, camera);
         super.width = 1;
         super.height = 1;
+        super.widthN /= scale;
+        super.heightN /= scale;
         super.posXInAtlasN = 0;
         super.posYInAtlasN = 0;
+        super.setStartPosition(x, y);
     }
 
     private void initializeBuffer() {
