@@ -81,7 +81,6 @@ public class Render implements Renderer {
     private Background skySprites;
     private Background green;
     private Sprite grassSprite;
-    private float scale = Initialization.height/540f;
 
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
@@ -150,7 +149,7 @@ public class Render implements Renderer {
 
     private boolean _goMove;
     private boolean _setAnimateMove;
-    private float speedX = 3 * scale;
+    private float speedX = 3;
     private int signMove;
 
     @Override
@@ -162,7 +161,7 @@ public class Render implements Renderer {
             if ((_goMove) && (Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) > speedX)) {
                 if (Math.abs(aliseSprite.getXWithCamera()) > 4500) {
                     green.setSpeedOfSlide(0);
-                    aliseSprite.translate(aliseSprite.getX() + speedX * signMove, aliseSprite.getY());
+                    aliseSprite.translateGlobal(aliseSprite.getX() + speedX * signMove, aliseSprite.getY());
                     if (camera.needMove() == true)
                         camera.needMove(false);
                 } else {
@@ -170,7 +169,7 @@ public class Render implements Renderer {
                     if (camera.needMove() == false)
                         camera.needMove(true);
 //                CHANGED
-                    aliseSprite.translate(Initialization.width / 2, aliseSprite.getY());
+                    aliseSprite.translateGlobal(Initialization.width / 2, aliseSprite.getY());
 
                 }
             } else if ((_goMove) && (Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) <= speedX)) {
@@ -307,24 +306,25 @@ public class Render implements Renderer {
 
         back = new Sprite[4];
         for (int i=0; i<4; i++) {
-            back[i] = new Sprite(context, i * desert.width/2, 0, desert.width/2, desert.height / 2, desert, camera);
+            back[i] = new Sprite(context, i * desert.width/2, -Initialization.height *0.02f, desert.width/2, desert.height / 2, desert, camera);
             back[i].translate(back[i].getX(), back[i].getY() + back[i].getHeight() / 2);
             back[i].attachSprite();
         }
         backg = new Sprite[4];
         for (int i=0; i<4; i++) {
-            backg[i] = new Sprite(context, i * grass.width/2, Initialization.height *0.15f, grass.width/2, grass.height / 2, grass, camera);
+            backg[i] = new Sprite(context, i * grass.width/2, Initialization.height *0.14f, grass.width/2, grass.height / 2, grass, camera);
             backg[i].translate(backg[i].getX(), backg[i].getY() + backg[i].getHeight() / 2);
             backg[i].attachSprite();
         }
 
-        aliseSprite = new AnimatedSprite(context, Initialization.width/(2*scale), Initialization.height *0.27f, 100, 196, alise, camera);
+        aliseSprite = new AnimatedSprite(context, Initialization.width/2, Initialization.height *0.27f, 100, 196, alise, camera);
+        aliseSprite.translateGlobal(Initialization.width/2, Initialization.height *0.27f);
         aliseSprite.setAnimate(new int[]{1}, new int[]{15});
         aliseSprite.attachHUDAnimatedSprite();
         aliseSprite.rotate(0, 0, 1, 0);
 
 
-        green = new Background(context, Initialization.width / 2, Initialization.height *0.35f, Initialization.width, greenBack.height, greenBack, camera);
+        green = new Background(context, Initialization.width / 2, Initialization.height *0.34f, Initialization.width, greenBack.height, greenBack, camera);
         green.attachBackground();
 
 
@@ -337,9 +337,9 @@ public class Render implements Renderer {
 
         trees = new Sprite[4];
         trees[0] = new Sprite(context, 830, Initialization.height*0.53f, tree.width/1.5f, tree.height/1.5f, tree, camera);
-        trees[1] = new Sprite(context, 1000, Initialization.height*0.53f, tree.width/2, tree.height/2, tree, camera);
-        trees[2] = new Sprite(context, 700, Initialization.height*0.48f, tree.width/3, tree.height/3, tree2, camera);
-        trees[3] = new Sprite(context, 1200, Initialization.height*0.5f, tree.width/2.5f, tree.height/2.5f, tree2, camera);
+        trees[1] = new Sprite(context, 1000, Initialization.height*0.56f, tree.width/2, tree.height/2, tree, camera);
+        trees[2] = new Sprite(context, 700, Initialization.height*0.5f, tree.width/3, tree.height/3, tree2, camera);
+        trees[3] = new Sprite(context, 1200, Initialization.height*0.5f, tree.width/2.5f, tree.height/2.5f, tree, camera);
 
 
         trees[0].attachSprite();
@@ -363,14 +363,14 @@ public class Render implements Renderer {
         //-------------------------------
 
         for (int i=0; i<4; i++) {
-            backg[i].drawIfVisible();
+            backg[i].draw();
         }
         homeSprite.drawIfVisible();
         trees[3].drawIfVisible();
         trees[1].drawIfVisible();
         //-------------------------------
         for (int i=0; i<4; i++) {
-            back[i].drawIfVisible();
+            back[i].draw();
         }
 
         if (setSequenceAndPositionForBack()) {
