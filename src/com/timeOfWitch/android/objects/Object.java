@@ -154,9 +154,10 @@ public class Object {
 
         x = posX;
         y = posY;
+        posX *=scale;
         float xN = posX / Initialization.width * 2 - 1;
         float yN = posY / Initialization.height * 2 - 1;
-        xN *= scale;
+        //xN *= scale;
         setIdentityM(translateMatrix, 0);
         translateM(translateMatrix, 0, xN, yN, 0);
 
@@ -204,12 +205,12 @@ public class Object {
         }
     }
     public boolean needToDisplay() {
-        if (Math.abs(camera.getCameraX()-x)*scale > camera.getCameraWidth()/2 + getWidth()/2) {
+        if (Math.abs((camera.getCameraXShifted()-x)*scale) > camera.getCameraWidth()/2 + getWidth()*scale/2) {
             return false;
         } else {
             return true;
         }
-
+        //return true;
     }
 
     public int getAngle() {

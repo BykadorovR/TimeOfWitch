@@ -14,7 +14,7 @@ public class Camera {
     public float startX, startY;
     private boolean needOfMovement;
     private float xCameraN;
-    private float diff = 0;
+    private float diff = -Initialization.width/2;
     private float signOfSpeedCamera;
     private float xCamera;
     private float yCamera;
@@ -84,6 +84,9 @@ public class Camera {
 
     public float getCameraX() {
         return xCamera;
+    }
+    public float getCameraXShifted() {
+        return xCamera-Initialization.width/2+450;
     }
 
     public float getCameraY() {
