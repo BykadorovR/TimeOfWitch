@@ -67,6 +67,9 @@ public class Object {
     protected float posXInAtlasN;
     protected float posYInAtlasN;
     protected Camera camera;
+    private float referenceWidth = 900f;
+    private float referenceHeight = 540f;
+    protected float scale = Initialization.height/referenceHeight;
 
     protected float[] matrix = new float[16];
     protected float[] scaleMatrix = new float[16];
@@ -85,13 +88,12 @@ public class Object {
         this.transparency = 1f;
         this.visibility = true;
         this.texture = texture;
-        this.heightN = height / Initialization.height;
-        this.widthN = width / Initialization.width;
+        this.heightN = scale*height / Initialization.height;
+        this.widthN =  scale*width / Initialization.width;
         setIdentityM(translateMatrix,0);
         setIdentityM(scaleMatrix, 0);
         setIdentityM(parallaxMatrix, 0);
         setIdentityM(rotateMatrix, 0);
-
 
         setStartPosition(x, y);
     }
@@ -154,6 +156,18 @@ public class Object {
 
         x = posX;
         y = posY;
+        posX *=scale;
+        float xN = posX / Initialization.width * 2 - 1;
+        float yN = posY / Initialization.height * 2 - 1;
+        //xN *= scale;
+        setIdentityM(translateMatrix, 0);
+        translateM(translateMatrix, 0, xN, yN, 0);
+
+    }
+    public void translateGlobal(float posX, float posY) {
+
+        x = posX;
+        y = posY;
         float xN = posX / Initialization.width * 2 - 1;
         float yN = posY / Initialization.height * 2 - 1;
         setIdentityM(translateMatrix, 0);
@@ -193,12 +207,12 @@ public class Object {
         }
     }
     public boolean needToDisplay() {
-        if (Math.abs(camera.getCameraX()-x) > camera.getCameraWidth()/2 + getWidth()/2) {
+        if (Math.abs((camera.getCameraXShifted()-x)*scale) > camera.getCameraWidth()/2 + getWidth()*scale/2) {
             return false;
         } else {
             return true;
         }
-
+        //return true;
     }
 
     public int getAngle() {
@@ -214,18 +228,18 @@ public class Object {
     }
 
     public float getWidth() {
-        return widthN * Initialization.width;
+        return widthN * Initialization.width/scale;
     }
 
     public float getHeight() {
-        return heightN * Initialization.height;
+        return heightN * Initialization.height/scale;
     }
 
     public void setWidth(float width){
-        this.widthN = width/Initialization.width;
+        this.widthN = scale*width/Initialization.width;
     }
     public void setHeight(float height){
-        this.heightN = height/Initialization.height;
+        this.heightN = scale*height/Initialization.height;
     }
 
     public float getScaleX() {

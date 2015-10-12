@@ -14,12 +14,15 @@ public class Camera {
     public float startX, startY;
     private boolean needOfMovement;
     private float xCameraN;
-    private float diff = 0;
+    private float diff = -Initialization.width/2;
     private float signOfSpeedCamera;
     private float xCamera;
     private float yCamera;
     private float cameraWidth;
     private float cameraHeight;
+    private float referenceWidth = 900f;
+    private float referenceHeight = 540f;
+    private float scale = Initialization.height/referenceHeight;
 
     public Camera(float cameraWidth, float cameraHeight, float posX, float posY) {
         camera = new float[16];
@@ -45,7 +48,9 @@ public class Camera {
     private void setCameraPosition(float xCamera, float yCamera) {
         this.xCamera = xCamera;
         this.yCamera = yCamera;
+        //xCamera *=scale;
         xCameraN = (xCamera / cameraWidth) * 2 - 1;
+        xCameraN *=scale;
         setIdentityM(camera, 0);
         if (xCamera - this.xCamera > 0)
             translateM(camera, 0, xCameraN, 0, 0);
@@ -69,9 +74,7 @@ public class Camera {
         return needOfMovement;
     }
 
-    public float[] getCamera() {
-        return camera;
-    }
+    public float[] getCamera() { return camera; }
 
     public float getCameraWidth() {
         return cameraWidth;
@@ -83,6 +86,9 @@ public class Camera {
 
     public float getCameraX() {
         return xCamera;
+    }
+    public float getCameraXShifted() {
+        return xCamera-Initialization.width/2+referenceWidth/2;
     }
 
     public float getCameraY() {
