@@ -20,7 +20,9 @@ public class Camera {
     private float yCamera;
     private float cameraWidth;
     private float cameraHeight;
-    private float scale = Initialization.height/540f;
+    private float referenceWidth = 900f;
+    private float referenceHeight = 540f;
+    private float scale = Initialization.height/referenceHeight;
 
     public Camera(float cameraWidth, float cameraHeight, float posX, float posY) {
         camera = new float[16];
@@ -86,7 +88,7 @@ public class Camera {
         return xCamera;
     }
     public float getCameraXShifted() {
-        return xCamera-Initialization.width/2+450;
+        return xCamera-Initialization.width/2+referenceWidth/2;
     }
 
     public float getCameraY() {

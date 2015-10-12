@@ -67,7 +67,9 @@ public class Object {
     protected float posXInAtlasN;
     protected float posYInAtlasN;
     protected Camera camera;
-    protected float scale = Initialization.height/540f;
+    private float referenceWidth = 900f;
+    private float referenceHeight = 540f;
+    protected float scale = Initialization.height/referenceHeight;
 
     protected float[] matrix = new float[16];
     protected float[] scaleMatrix = new float[16];
