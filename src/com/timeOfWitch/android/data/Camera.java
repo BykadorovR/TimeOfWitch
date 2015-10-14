@@ -18,14 +18,10 @@ public class Camera {
     private float signOfSpeedCamera;
     private float xCamera;
     private float yCamera;
-    private float cameraWidth;
-    private float cameraHeight;
 
-    public Camera(float cameraWidth, float cameraHeight, float posX, float posY) {
+    public Camera(float posX, float posY) {
         camera = new float[16];
         needOfMovement = true;
-        this.cameraWidth = cameraWidth;
-        this.cameraHeight = cameraHeight;
         startX = posX;
         startY = posY;
         setCameraPosition(posX,posY);
@@ -45,7 +41,7 @@ public class Camera {
     private void setCameraPosition(float xCamera, float yCamera) {
         this.xCamera = xCamera;
         this.yCamera = yCamera;
-        xCameraN = (xCamera / cameraWidth) * 2 - 1;
+        xCameraN = (xCamera / Initialization.realWidth) * 2 - 1;
         setIdentityM(camera, 0);
         if (xCamera - this.xCamera > 0)
             translateM(camera, 0, xCameraN, 0, 0);
@@ -71,14 +67,6 @@ public class Camera {
 
     public float[] getCamera() {
         return camera;
-    }
-
-    public float getCameraWidth() {
-        return cameraWidth;
-    }
-
-    public float getCameraHeight() {
-        return cameraHeight;
     }
 
     public float getCameraX() {

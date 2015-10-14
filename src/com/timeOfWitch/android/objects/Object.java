@@ -85,8 +85,8 @@ public class Object {
         this.transparency = 1f;
         this.visibility = true;
         this.texture = texture;
-        this.heightN = height / Initialization.height;
-        this.widthN = width / Initialization.width;
+        this.heightN = height / Initialization.realHeight;
+        this.widthN = width / Initialization.realWidth;
         setIdentityM(translateMatrix,0);
         setIdentityM(scaleMatrix, 0);
         setIdentityM(parallaxMatrix, 0);
@@ -154,8 +154,8 @@ public class Object {
 
         x = posX;
         y = posY;
-        float xN = posX / Initialization.width * 2 - 1;
-        float yN = posY / Initialization.height * 2 - 1;
+        float xN = posX / Initialization.realWidth * 2 - 1;
+        float yN = posY / Initialization.realHeight * 2 - 1;
         setIdentityM(translateMatrix, 0);
         translateM(translateMatrix, 0, xN, yN, 0);
 
@@ -182,7 +182,7 @@ public class Object {
                 //Log.d("myLogs", x + " x");
                 x = x + parallax * camera.getSignOfSpeedCamera();
                 translate(x, y);
-                float xN = x / Initialization.width * 2 - 1;
+                float xN = x / Initialization.realWidth * 2 - 1;
 
                 setIdentityM(parallaxMatrix, 0);
                 translateM(parallaxMatrix, 0, xN, 0, 0);
@@ -193,7 +193,8 @@ public class Object {
         }
     }
     public boolean needToDisplay() {
-        if (Math.abs(camera.getCameraX()-x) > camera.getCameraWidth()/2 + getWidth()/2) {
+        //Here Initialization.realWidth - is real camera "width"
+        if (Math.abs(camera.getCameraX()-x) > Initialization.realWidth/2 + getWidth()/2) {
             return false;
         } else {
             return true;
@@ -214,18 +215,18 @@ public class Object {
     }
 
     public float getWidth() {
-        return widthN * Initialization.width;
+        return widthN * Initialization.realWidth;
     }
 
     public float getHeight() {
-        return heightN * Initialization.height;
+        return heightN * Initialization.realHeight;
     }
 
     public void setWidth(float width){
-        this.widthN = width/Initialization.width;
+        this.widthN = width/Initialization.realWidth;
     }
     public void setHeight(float height){
-        this.heightN = height/Initialization.height;
+        this.heightN = height/Initialization.realHeight;
     }
 
     public float getScaleX() {
