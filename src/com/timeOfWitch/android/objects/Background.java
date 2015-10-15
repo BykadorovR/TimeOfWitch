@@ -46,11 +46,8 @@ public class Background extends Object {
         super(scene, x, y, width, height, texture, camera);
         super.width = 1;
         super.height = 1;
-        super.widthN /= scale;
-        //super.heightN /= scale;
         super.posXInAtlasN = 0;
         super.posYInAtlasN = 0;
-        super.setStartPosition(x/scale, y);
     }
 
     private void initializeBuffer() {
@@ -67,6 +64,7 @@ public class Background extends Object {
                 .asFloatBuffer()
                 .put(vertex_data);
     }
+
 
     public void attachBackground(){
         initializeBuffer();
@@ -88,8 +86,4 @@ public class Background extends Object {
         speedOfSlideN = this.speedOfSlide/texture.width;
     }
 
-    public void unscale()
-    {
-        heightN /= scale;
-    }
 }

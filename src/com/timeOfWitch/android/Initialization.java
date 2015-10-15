@@ -30,8 +30,8 @@ import android.widget.Toast;
 public class Initialization extends Activity {
     private GLSurfaceView glSurfaceView; 
     private boolean rendererSet = false;
-    public static int width;
-    public static int height;
+    public static int realWidth;
+    public static int realHeight;
     private boolean _isFirstMove = false;
     private int actionIndexPUp=-1;
     private int actionIndexMove;
@@ -46,8 +46,8 @@ public class Initialization extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics metricsB = new DisplayMetrics();
         display.getMetrics(metricsB);
-        width = metricsB.widthPixels;
-        height = metricsB.heightPixels;
+        realWidth = metricsB.widthPixels;
+        realHeight = metricsB.heightPixels;
         glSurfaceView = new GLSurfaceView(this);
         ActivityManager activityManager = 
             (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

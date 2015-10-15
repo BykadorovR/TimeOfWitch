@@ -52,10 +52,9 @@ public class Render implements Renderer {
     private FPSCounter fps;
     private Background sprite;
     private Sprite anim;
+    private Sprite treeS;
+    private Sprite treeS2;
     private Texture tree;
-    private Texture tree2;
-    private Texture forest_far;
-    private Texture forest_mid;
     private Texture home;
     private Sprite homeSprite;
     private TextureHelper textureHelper;
@@ -64,7 +63,6 @@ public class Render implements Renderer {
     private Texture desert;
     private Texture desert2;
     private Texture grass;
-    private Texture grass2;
     private Texture protoman;
     private TextureAtlas atlas1;
     private Texture textureatlas1;
@@ -79,7 +77,6 @@ public class Render implements Renderer {
     private Sprite back1;
     private Sprite back[];
     private Sprite backg[];
-    private Sprite[] trees;
     private Background skySprites;
     private Background green;
     private Sprite grassSprite;
@@ -88,86 +85,91 @@ public class Render implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         fps = new FPSCounter();
         textureHelper = new TextureHelper();
         Scene scene1 = new Scene();
         atlas1 = new TextureAtlas(2048, 2048, 1);
+
+
         alise = new Texture(1250, 450, 0, 0, 1, 5, R.drawable.red_smaller);
+        atlas1.attachTexture(alise);
+
+
         desert = new Texture(1000, 275,0,451, 1, 1, R.drawable.wild_road);
         desert2 = new Texture(1000, 275,0,727, 1, 1, R.drawable.wild_road_crossing_small);
         grass = new Texture(1000, 116, 0, 1003, 1, 1, R.drawable.grass_small);
-        grass2 = new Texture(1000, 116, 0, 1120, 1, 1, R.drawable.grass_road_small);
         home = new Texture(512, 505, 1251, 0, 1, 1, R.drawable.lodge_small);
-        atlas1.attachTexture(alise);
         atlas1.attachTexture(desert);
         atlas1.attachTexture(desert2);
         atlas1.attachTexture(grass);
-        atlas1.attachTexture(grass2);
         atlas1.attachTexture(home);
+
         atlas1.loadAtlas();
 
-        atlas3 = new TextureAtlas(2048, 1024, 3);
-        tree = new Texture(600, 916, 0, 0, 1, 1, R.drawable.tree_d_small);
-        tree2 = new Texture(600, 916, 601, 0, 1, 1, R.drawable.tree_small);
-        forest_far = new Texture(950, 150, 0, 917, 1, 1, R.drawable.forest_far_small);
-        forest_mid = new Texture(973, 370, 0, 1068, 1, 1, R.drawable.forest_mid_small);
-        atlas3.attachTexture(tree);
-        atlas3.attachTexture(tree2);
-        atlas3.attachTexture(forest_far);
-        atlas3.attachTexture(forest_mid);
-        atlas3.loadAtlas();
+        atlas3 = new TextureAtlas( 2048, 1024, 3);
+
         sky = new Texture(1000, 455, 1, 1, R.drawable.sky_small);
         greenBack = new Texture(1000, 185, 1, 1, R.drawable.back_small);
-        sky.loadTexture(0);
-        greenBack.loadTexture(2);
+
+        tree = new Texture(600, 916, 1001, 0, 1, 1, R.drawable.tree);
 
 
-        camera = new Camera(Initialization.width, Initialization.height, Initialization.width/2, Initialization.height / 2);
+
+        sky.loadTexture( 0);
+        greenBack.loadTexture( 2);
+
+        atlas3.attachTexture(tree);
+
+        atlas3.loadAtlas();
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        camera = new Camera(Initialization.realWidth / 2, Initialization.realHeight / 2);
         camera.needMove(false);
 
 
         back = new Sprite[4];
         for (int i=0; i<4; i++) {
-            back[i] = new Sprite(scene1, (i-1) * desert.width/2, Initialization.height *0.12f, desert.width/2, desert.height / 2, desert, camera);
+            back[i] = new Sprite(scene1, i * Initialization.realWidth/2, 0, Initialization.realWidth / 2, desert.height / 2, desert, camera);
+            back[i].translate(back[i].getX(), back[i].getY() + back[i].getHeight() / 2);
             back[i].attachSprite();
         }
         backg = new Sprite[4];
         for (int i=0; i<4; i++) {
-            backg[i] = new Sprite(scene1, (i-1) * grass.width/2, Initialization.height *0.19f, grass.width/2, grass.height / 2, grass, camera);
+            backg[i] = new Sprite(scene1, i * Initialization.realWidth/2, Initialization.realHeight *0.075f, Initialization.realWidth / 2, grass.height / 2, grass, camera);
+            backg[i].translate(backg[i].getX(), backg[i].getY() + backg[i].getHeight() / 2);
             backg[i].attachSprite();
         }
 
-        aliseSprite = new AnimatedSprite(scene1, Initialization.width/2, Initialization.height *0.27f, 100, 196, alise, camera);
-        aliseSprite.translateGlobal(Initialization.width / 2, Initialization.height * 0.27f);
+        aliseSprite = new AnimatedSprite(scene1, Initialization.realWidth / 2, back[0].getY() + back[0].getHeight() / 2, 100, 196, alise, camera);
         aliseSprite.setAnimate(new int[]{1}, new int[]{15});
         aliseSprite.attachHUDAnimatedSprite();
         aliseSprite.rotate(0, 0, 1, 0);
 
-        green = new Background(scene1, Initialization.width / 2, Initialization.height *0.34f, Initialization.width, greenBack.height, greenBack, camera);
+        green = new Background(scene1, Initialization.realWidth / 2, Initialization.realHeight *0.18f, Initialization.realWidth , greenBack.height, greenBack, camera);
+
         green.attachBackground();
 
 
-        skySprites = new Background(scene1, Initialization.width / 2, Initialization.height / 2 + Initialization.height / 8, Initialization.width, Initialization.height*3/4f, sky, camera);
-        skySprites.unscale();
+
+        skySprites = new Background(scene1, Initialization.realWidth / 2, Initialization.realHeight / 2, Initialization.realWidth, Initialization.realHeight, sky, camera);
         skySprites.setSpeedOfSlide(getSpeedForParallax(skySprites, 1));
         skySprites.attachBackground();
 
-        homeSprite = new Sprite(scene1, 1000, Initialization.height*0.41f, home.width * 0.7f,home.height * 0.7f, home, camera);
+
+        homeSprite = new Sprite(scene1, Initialization.realWidth, Initialization.realHeight*0.21f, 512*0.7f,505*0.7f, home, camera);
+
         homeSprite.attachSprite();
 
-        trees = new Sprite[4];
-        trees[0] = new Sprite(scene1, 830, Initialization.height*0.53f, tree.width/1.5f, tree.height/1.5f, tree, camera);
-        trees[1] = new Sprite(scene1, 1000, Initialization.height*0.52f, tree.width/2, tree.height/2, tree, camera);
-        trees[2] = new Sprite(scene1, 700, Initialization.height*0.48f, tree.width/3, tree.height/3, tree2, camera);
-        trees[3] = new Sprite(scene1, 1200, Initialization.height*0.51f, tree.width/2.5f, tree.height/2.5f, tree, camera);
+        treeS = new Sprite(scene1, Initialization.realWidth/ 1.2f, back[0].getY() - back[0].getHeight() / 1.5f, tree.width/1.5f, tree.height/1.5f, tree, camera);
 
 
-        trees[0].attachSprite();
-        trees[1].attachSprite();
-        trees[2].attachSprite();
-        trees[3].attachSprite();
+        treeS2 = new Sprite(scene1, Initialization.realWidth, back[0].getY(), tree.width/2, tree.height/2, tree, camera);
+
+
+        treeS.translate(treeS.getX(), treeS.getY() + treeS.getHeight() / 2);
+        treeS2.translate(treeS2.getX(), treeS2.getY() + treeS2.getHeight() / 2);
+        treeS.attachSprite();
+        treeS2.attachSprite();
 
         textureHelper.useTextureAtlas(atlas1);
         textureHelper.useTexture(greenBack);
@@ -203,10 +205,8 @@ public class Render implements Renderer {
             xMoveHeroChk = up[0][0] + camera.getCameraXMoved();
             signMove = Integer.signum((int) (xMoveHeroEnd - aliseSprite.getXWithCamera()));
 
-            trees[0].coeffForParalax(getSpeedForParallax(trees[0]));
-            trees[1].coeffForParalax(getSpeedForParallax(trees[1]));
-            trees[2].coeffForParalax(getSpeedForParallax(trees[2]));
-            trees[3].coeffForParalax(getSpeedForParallax(backg[0]));
+            treeS.coeffForParalax(getSpeedForParallax(treeS));
+            treeS2.coeffForParalax(getSpeedForParallax(treeS2));
             homeSprite.coeffForParalax(getSpeedForParallax(backg[0], 1));
             for (int i=0; i<4; i++) {
                 backg[i].coeffForParalax(getSpeedForParallax(backg[0], 1));
@@ -242,14 +242,15 @@ public class Render implements Renderer {
             if ((_goMove) && (Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) > speedX)) {
                 if (Math.abs(aliseSprite.getXWithCamera()) > 4500) {
                     green.setSpeedOfSlide(0);
-                    aliseSprite.translateGlobal(aliseSprite.getX() + speedX * signMove, aliseSprite.getY());
+                    aliseSprite.translate(aliseSprite.getX() + speedX * signMove, aliseSprite.getY());
                     if (camera.needMove() == true)
                         camera.needMove(false);
                 } else {
                     green.setSpeedOfSlide(getSpeedForParallax(green,signMove));
                     if (camera.needMove() == false)
                         camera.needMove(true);
-                    aliseSprite.translateGlobal(Initialization.width / 2, aliseSprite.getY());
+//                CHANGED
+                    aliseSprite.translate(Initialization.realWidth / 2, aliseSprite.getY());
 
                 }
             } else if ((_goMove) && (Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) <= speedX)) {
@@ -262,19 +263,16 @@ public class Render implements Renderer {
                 aliseSprite.setAnimate(new int[]{1}, new int[]{15});
             }
         }
-        Log.d("myLogs", "CAm X=" + camera.getCameraXShifted() + "init width =" + Initialization.width  + "init height =" + Initialization.height);
         //-------------------------------
         skySprites.draw();
         green.draw();
-        trees[2].draw();
         //-------------------------------
 
         for (int i=0; i<4; i++) {
             backg[i].draw();
         }
         homeSprite.draw();
-        trees[3].draw();
-        trees[1].draw();
+        treeS2.draw();
         //-------------------------------
         for (int i=0; i<4; i++) {
             back[i].draw();
@@ -286,7 +284,7 @@ public class Render implements Renderer {
 
         aliseSprite.draw();
         //-------------------------------
-        trees[0].draw();
+        treeS.draw();
 
 
     }
@@ -294,24 +292,24 @@ public class Render implements Renderer {
     private boolean setSequenceAndPositionForBack() {
         float toRight, toLeft;
         boolean t = false;
-        toRight = Math.abs (camera.getCameraXShifted() - back[3].getX() + back[3].getWidth());
-        toLeft = Math.abs (camera.getCameraXShifted() - back[0].getX() - back[0].getWidth()/2);
-        //Log.d("myLogs", " cam X " + camera.getCameraX() + " bak0 X " + back[0].getX() + " bak3 X " + back[3].getX());
+        toRight = Math.abs (camera.getCameraX()  - back[3].getX() + back[3].getWidth()/2);
+        toLeft = Math.abs (camera.getCameraX()  - back[0].getX() - back[0].getWidth()/2);
+
         if (toLeft < speedX || toRight < speedX) {
 
-            if (toLeft < 2*speedX) {
+            if (toLeft < speedX) {
                 back[3].translate(back[0].getX() - back[0].getWidth(), back[3].getY());
                 back = Geometry.shiftToRight(back, 1);
             }
-            if (toRight < 2*speedX) {
+            if (toRight < speedX) {
                 back[0].translate(back[3].getX() + back[3].getWidth(), back[0].getY());
                 back = Geometry.shiftToLeft(back, 1);
             }
             t = true;
         }
 
-        toRight = Math.abs (camera.getCameraXShifted() - backg[3].getX() + backg[3].getWidth());
-        toLeft = Math.abs (camera.getCameraXShifted() - backg[0].getX() - backg[0].getWidth()/2);
+        toRight = Math.abs (camera.getCameraX()  - backg[3].getX() + backg[3].getWidth()/2);
+        toLeft = Math.abs (camera.getCameraX()  - backg[0].getX() - backg[0].getWidth()/2);
 
         if (toLeft < speedX || toRight < speedX) {
 
@@ -362,13 +360,15 @@ public class Render implements Renderer {
 
     public float getSpeedForParallax(Object object) {
 
-        return (-aliseSprite.getY()*540/Initialization.height+aliseSprite.getHeight()/2 +
-                object.getY()*540/Initialization.height-object.getHeight()/2)/100f;
+        return 8*(-aliseSprite.getY()+aliseSprite.getHeight()/2 +
+                object.getY()-object.getHeight()/2)
+                / Initialization.realHeight;
     }
     public float getSpeedForParallax(Object object, int direction) {
 
-        return direction*(-aliseSprite.getY()*540/Initialization.height+aliseSprite.getHeight()/2 +
-                object.getY()*540/Initialization.height-object.getHeight()/2)/100f;
+        return direction*8*(-aliseSprite.getY()+aliseSprite.getHeight()/2 +
+                object.getY()-object.getHeight()/2)
+                / Initialization.realHeight;
     }
 
 
