@@ -249,7 +249,6 @@ public class Render implements Renderer {
                     green.setSpeedOfSlide(getSpeedForParallax(green,signMove));
                     if (camera.needMove() == false)
                         camera.needMove(true);
-//                CHANGED
                     aliseSprite.translateGlobal(Initialization.width / 2, aliseSprite.getY());
 
                 }
@@ -263,6 +262,7 @@ public class Render implements Renderer {
                 aliseSprite.setAnimate(new int[]{1}, new int[]{15});
             }
         }
+        Log.d("myLogs", "CAm X=" + camera.getCameraXShifted() + "init width =" + Initialization.width  + "init height =" + Initialization.height);
         //-------------------------------
         skySprites.draw();
         green.draw();
@@ -296,7 +296,7 @@ public class Render implements Renderer {
         boolean t = false;
         toRight = Math.abs (camera.getCameraXShifted() - back[3].getX() + back[3].getWidth());
         toLeft = Math.abs (camera.getCameraXShifted() - back[0].getX() - back[0].getWidth()/2);
-        Log.d("myLogs", " cam X " + camera.getCameraX() + " bak0 X " + back[0].getX() + " bak3 X " + back[3].getX());
+        //Log.d("myLogs", " cam X " + camera.getCameraX() + " bak0 X " + back[0].getX() + " bak3 X " + back[3].getX());
         if (toLeft < speedX || toRight < speedX) {
 
             if (toLeft < 2*speedX) {

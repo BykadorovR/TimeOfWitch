@@ -14,14 +14,14 @@ public class Camera {
     public float startX, startY;
     private boolean needOfMovement;
     private float xCameraN;
-    private float diff = -Initialization.width/2;
+    private float diff = 0;
     private float signOfSpeedCamera;
     private float xCamera;
     private float yCamera;
     private float cameraWidth;
     private float cameraHeight;
-    private float referenceWidth = 900f;
     private float referenceHeight = 540f;
+    private float referenceWidth = 540*Initialization.width/Initialization.height;
     private float scale = Initialization.height/referenceHeight;
 
     public Camera(float cameraWidth, float cameraHeight, float posX, float posY) {
@@ -31,14 +31,14 @@ public class Camera {
         this.cameraHeight = cameraHeight;
         startX = posX;
         startY = posY;
-        setCameraPosition(posX,posY);
+        setCameraPosition(posX, posY);
 
     }
 
     //translateM - translate current x and y to diff so newX = x + diff; newY = y + diff; if diff is no positive translating will be to left
     public void translate(float xCamera, float yCamera) {
         if (needOfMovement) {
-            float diffOfCameraX = xCamera - this.xCamera;
+            float diffOfCameraX = xCamera - getCameraX();
             signOfSpeedCamera = Math.signum(diffOfCameraX);
             diff += diffOfCameraX;
             setCameraPosition(xCamera, yCamera);
