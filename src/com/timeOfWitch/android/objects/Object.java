@@ -87,6 +87,7 @@ public class Object {
         this.texture = texture;
         this.heightN = height / Initialization.realHeight;
         this.widthN = width / Initialization.realWidth;
+        scene.setObject(this);
         setIdentityM(translateMatrix,0);
         setIdentityM(scaleMatrix, 0);
         setIdentityM(parallaxMatrix, 0);
