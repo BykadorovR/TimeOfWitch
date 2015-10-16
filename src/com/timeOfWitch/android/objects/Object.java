@@ -48,7 +48,6 @@ public class Object {
     protected int textureColumn;
     protected Texture texture;
     protected float parallax;
-    protected Scene scene;
 
 
     protected FloatBuffer buffer;
@@ -88,7 +87,7 @@ public class Object {
         this.texture = texture;
         this.heightN = height / Initialization.realHeight;
         this.widthN = width / Initialization.realWidth;
-        this.scene = scene;
+        scene.setObject(this);
         setIdentityM(translateMatrix,0);
         setIdentityM(scaleMatrix, 0);
         setIdentityM(parallaxMatrix, 0);
@@ -99,7 +98,6 @@ public class Object {
     }
 
     public void attach(int fragmentShader, int vertexShader) {
-        scene.setObject(this);
         int vertexShaderTexture = ShaderHelper.compileVertexShader(TextResourceReader.readTextFileFromResource(
                 context, vertexShader));
         int fragmentShaderTexture = ShaderHelper.compileFragmentShader(TextResourceReader.readTextFileFromResource(
