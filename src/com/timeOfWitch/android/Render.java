@@ -198,11 +198,11 @@ public class Render implements Renderer {
 
         if ((up[0][0] != 0) && (finger == 0)) {
             if (xMoveHeroEnd == 0) camera.needMove(true);
-            xMoveHeroEnd = up[0][0] + camera.getCameraXMoved();
+            xMoveHeroEnd = up[0][0] + camera.getCameraX();
             if ((Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) < aliseSprite.getWidth() / 3)) {
                 xMoveHeroEnd = xMoveHeroChk;
             }
-            xMoveHeroChk = up[0][0] + camera.getCameraXMoved();
+            xMoveHeroChk = up[0][0] + camera.getCameraX();
             signMove = Integer.signum((int) (xMoveHeroEnd - aliseSprite.getXWithCamera()));
 
             treeS.coeffForParalax(getSpeedForParallax(treeS));

@@ -13,39 +13,25 @@ public class Camera {
     float[] camera;
     public float startX, startY;
     private boolean needOfMovement;
-    private float xCameraN;
-    private float diff = 0;
-    private float signOfSpeedCamera;
+    private float signOfSpeedCamera = 0;
     private float xCamera;
     private float yCamera;
 
     public Camera(float posX, float posY) {
         camera = new float[16];
         needOfMovement = true;
-        startX = posX;
-        startY = posY;
-        setCameraPosition(posX,posY);
-
+        xCamera = posX;
+        yCamera = posY;
     }
 
     //translateM - translate current x and y to diff so newX = x + diff; newY = y + diff; if diff is no positive translating will be to left
     public void translate(float xCamera, float yCamera) {
         if (needOfMovement) {
             float diffOfCameraX = xCamera - this.xCamera;
+            this.xCamera = xCamera;
+            this.yCamera = yCamera;
             signOfSpeedCamera = Math.signum(diffOfCameraX);
-            diff += diffOfCameraX;
-            setCameraPosition(xCamera, yCamera);
         }
-    }
-
-    private void setCameraPosition(float xCamera, float yCamera) {
-        this.xCamera = xCamera;
-        this.yCamera = yCamera;
-        xCameraN = (xCamera / Initialization.realWidth) * 2 - 1;
-        setIdentityM(camera, 0);
-        if (xCamera - this.xCamera > 0)
-            translateM(camera, 0, xCameraN, 0, 0);
-        else translateM(camera, 0, -xCameraN, 0, 0);
     }
 
 
@@ -53,9 +39,6 @@ public class Camera {
         return signOfSpeedCamera;
     }
     //deviation from equilibrium (startX and startY)
-    public float getCameraXMoved() {
-        return diff;
-    }
 
     public void needMove(boolean needOfMovement) {
         this.needOfMovement = needOfMovement;
@@ -63,10 +46,6 @@ public class Camera {
 
     public boolean needMove() {
         return needOfMovement;
-    }
-
-    public float[] getCamera() {
-        return camera;
     }
 
     public float getCameraX() {
@@ -77,7 +56,4 @@ public class Camera {
         return yCamera;
     }
 
-    public void resetCameraDiff() {
-        diff = 0;
-    }
 }
