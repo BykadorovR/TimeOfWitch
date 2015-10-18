@@ -126,7 +126,7 @@ public class Render implements Renderer {
         sky.loadTexture(0);
         greenBack.loadTexture(2);
 
-        camera = new Camera(Initialization.realWidth / 2, Initialization.realHeight / 2);
+        camera = new Camera(0, Initialization.realHeight / 2);
         camera.needMove(false);
 
         skySprites = new Background(scene1, Initialization.realWidth / 2, Initialization.realHeight / 2, Initialization.realWidth, Initialization.realHeight, sky, camera);
@@ -134,20 +134,20 @@ public class Render implements Renderer {
 
         backg = new Sprite[4];
         for (int i=0; i<4; i++) {
-            backg[i] = new Sprite(scene1, i * Initialization.realWidth/2, Initialization.realHeight *0.075f, Initialization.realWidth / 2, grass.height / 2, grass, camera);
+            backg[i] = new Sprite(scene1, i * grass.width/2, Initialization.realHeight *0.075f, grass.width/2, grass.height / 2, grass, camera);
             backg[i].translate(backg[i].getX(), backg[i].getY() + backg[i].getHeight() / 2);
         }
 
         back = new Sprite[4];
         for (int i=0; i<4; i++) {
-            back[i] = new Sprite(scene1, i * Initialization.realWidth/2, 0, Initialization.realWidth / 2, desert.height / 2, desert, camera);
+            back[i] = new Sprite(scene1, i * desert.width/2, 0, desert.width/2, desert.height / 2, desert, camera);
             back[i].translate(back[i].getX(), back[i].getY() + back[i].getHeight() / 2);
         }
 
-        homeSprite = new Sprite(scene1, Initialization.realWidth, Initialization.realHeight*0.21f, 512*0.7f,505*0.7f, home, camera);
+        homeSprite = new Sprite(scene1, 1000, Initialization.realHeight*0.21f, 512*0.7f,505*0.7f, home, camera);
 
-        treeS = new Sprite(scene1, Initialization.realWidth/ 1.2f, 0, tree.width/1.5f, tree.height/1.5f, tree, camera);
-        treeS2 = new Sprite(scene1, Initialization.realWidth, 0, tree.width / 2, tree.height / 2, tree, camera);
+        treeS = new Sprite(scene1, 800, 0, tree.width/1.5f, tree.height/1.5f, tree, camera);
+        treeS2 = new Sprite(scene1, 1000, 0, tree.width / 2, tree.height / 2, tree, camera);
 
         treeS.translate(treeS.getX(), back[0].getY() - back[0].getHeight() / 1.5f + treeS.getHeight() / 2);
         treeS2.translate(treeS2.getX(), back[0].getY() + treeS2.getHeight() / 2);
@@ -209,13 +209,13 @@ public class Render implements Renderer {
         if ((up[0][0] != 0) && (finger == 0)) {
             if (xMoveHeroEnd == 0) camera.needMove(true);
             xMoveHeroEnd = up[0][0] + camera.getCameraX();
-            if ((Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) < aliseSprite.getWidth() / 3)) {
+            if ((Math.abs((aliseSprite.getX() + camera.getCameraX()) - xMoveHeroEnd) < aliseSprite.getWidth() / 3)) {
                 xMoveHeroEnd = xMoveHeroChk;
             }
             xMoveHeroChk = up[0][0] + camera.getCameraX();
-            signMove = Integer.signum((int) (xMoveHeroEnd - aliseSprite.getXWithCamera()));
+            signMove = Integer.signum((int) (xMoveHeroEnd - (aliseSprite.getX() + camera.getCameraX())));
 
-            if ((Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) > aliseSprite.getWidth() / 3)) {
+            if ((Math.abs((aliseSprite.getX() + camera.getCameraX()) - xMoveHeroEnd) > aliseSprite.getWidth() / 3)) {
                 _goMove = true;
                 if (signMove < 0)
                     aliseSprite.rotate(180, 0, 1, 0);
@@ -242,8 +242,8 @@ public class Render implements Renderer {
         glClear(GL_COLOR_BUFFER_BIT);
         if (xMoveHeroEnd != 0) {
             camera.translate(camera.getCameraX() + speedX * signMove, 0);
-            if ((_goMove) && (Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) > speedX)) {
-                if (Math.abs(aliseSprite.getXWithCamera()) > 4500) {
+            if ((_goMove) && (Math.abs((aliseSprite.getX() + camera.getCameraX()) - xMoveHeroEnd) > speedX)) {
+                if (Math.abs((aliseSprite.getX() + camera.getCameraX())) > 4500) {
                     green.setSpeedOfSlide(0);
                     aliseSprite.translate(aliseSprite.getX() + speedX * signMove, aliseSprite.getY());
                     if (camera.needMove() == true)
@@ -256,7 +256,7 @@ public class Render implements Renderer {
                     aliseSprite.translate(Initialization.realWidth / 2, aliseSprite.getY());
 
                 }
-            } else if ((_goMove) && (Math.abs(aliseSprite.getXWithCamera() - xMoveHeroEnd) <= speedX)) {
+            } else if ((_goMove) && (Math.abs((aliseSprite.getX() + camera.getCameraX()) - xMoveHeroEnd) <= speedX)) {
                 _goMove = false;
                 green.setSpeedOfSlide(0);
                 if (camera.needMove() == true)
@@ -266,6 +266,7 @@ public class Render implements Renderer {
                 aliseSprite.setAnimate(new int[]{1}, new int[]{15});
             }
         }
+        Log.d("myLogs", " aX = " + aliseSprite.getX()+ " Xscreen = " + (aliseSprite.getX() + camera.getCameraX()));
         setSequenceAndPositionForBack();
         scene1.draw();
 
@@ -274,8 +275,8 @@ public class Render implements Renderer {
     private boolean setSequenceAndPositionForBack() {
         float toRight, toLeft;
         boolean t = false;
-        toRight = Math.abs (camera.getCameraX()  - back[3].getX() + back[3].getWidth()/2);
-        toLeft = Math.abs (camera.getCameraX()  - back[0].getX() - back[0].getWidth()/2);
+        toRight = Math.abs (Initialization.realWidth - back[3].getXScreen() - back[3].getWidth()/2);
+        toLeft = Math.abs (back[0].getXScreen() - back[0].getWidth()/2);
 
         if (toLeft < speedX || toRight < speedX) {
 
@@ -290,8 +291,8 @@ public class Render implements Renderer {
             t = true;
         }
 
-        toRight = Math.abs (camera.getCameraX()  - backg[3].getX() + backg[3].getWidth()/2);
-        toLeft = Math.abs (camera.getCameraX()  - backg[0].getX() - backg[0].getWidth()/2);
+        toRight = Math.abs (Initialization.realWidth - backg[3].getXScreen() - backg[3].getWidth()/2);
+        toLeft = Math.abs (backg[0].getXScreen() - backg[0].getWidth()/2);
 
         if (toLeft < speedX || toRight < speedX) {
 
