@@ -48,7 +48,7 @@ public class Object {
     protected int textureColumn;
     protected Texture texture;
     protected float parallax;
-    protected float startX;
+    protected float parallaxValue;
     protected Scene scene;
 
 
@@ -78,10 +78,10 @@ public class Object {
 
 
     protected Object(Scene scene, float x, float y, float width, float height, Texture texture, Camera camera) {
-        startX = x;
         this.x = x;
         this.y = y;
         this.parallax = 0;
+        this.parallaxValue = 0;
         this.context = Render.context;
         this.textureColumn = texture.column;
         this.camera = camera;
@@ -152,9 +152,7 @@ public class Object {
 
 
     public void translate(float posX, float posY) {
-
         x = posX;
-        startX = posX;
         y = posY;
 
     }
@@ -166,11 +164,12 @@ public class Object {
         if (!_isHUD) {
             if (parallax != 0) {
                 if (camera.needMove()) {
-                    x += parallax * camera.getSignOfSpeedCamera();
-                    xWithAllModif = x;
+                    parallaxValue += parallax * camera.getSignOfSpeedCamera();
+                    //x += parallax * camera.getSignOfSpeedCamera();
+                    //xWithAllModif += parallaxValue;
                 }
             }
-            xWithAllModif -= camera.getCameraX();
+            xWithAllModif += parallaxValue - camera.getCameraX();
             float xN = xWithAllModif / Initialization.realWidth * 2 - 1;
             float yN = yWithAllModif / Initialization.realHeight * 2 - 1;
             setIdentityM(translateMatrix, 0);
@@ -203,7 +202,6 @@ public class Object {
         } else {
             return true;
         }
-
     }
 
     public int getAngle() {
@@ -211,14 +209,14 @@ public class Object {
     }
 
     public float getX() {
-        return startX;
+        return x;
     }
 
     public float getXScreen() {
         if (_isHUD)
             return x;
         else
-            return x - camera.getCameraX();
+            return x + parallaxValue - camera.getCameraX();
     }
 
     public float getY() {
@@ -236,6 +234,7 @@ public class Object {
     public void setWidth(float width){
         this.widthN = width/Initialization.realWidth;
     }
+
     public void setHeight(float height){
         this.heightN = height/Initialization.realHeight;
     }
@@ -260,9 +259,7 @@ public class Object {
         this.visibility = visibility;
     }
 
-    public boolean getVisibility() {
-        return visibility;
-    }
+    public boolean getVisibility() { return visibility; }
 
     public void coeffForParalax(float parallax) {
         this.parallax = parallax;
