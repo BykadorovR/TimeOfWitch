@@ -48,6 +48,7 @@ public class Object {
     protected int textureColumn;
     protected Texture texture;
     protected float parallax;
+    protected float startX;
     protected Scene scene;
 
 
@@ -77,6 +78,7 @@ public class Object {
 
 
     protected Object(Scene scene, float x, float y, float width, float height, Texture texture, Camera camera) {
+        startX = x;
         this.x = x;
         this.y = y;
         this.parallax = 0;
@@ -150,7 +152,9 @@ public class Object {
 
 
     public void translate(float posX, float posY) {
+
         x = posX;
+        startX = posX;
         y = posY;
 
     }
@@ -194,7 +198,7 @@ public class Object {
 
 
     public boolean needToDisplay() {
-        if (x - camera.getCameraX() < -getWidth()/2 || x - camera.getCameraX() > Initialization.realWidth + getWidth()/2) {
+        if (getXScreen() < -getWidth()/2 || getXScreen() > Initialization.realWidth + getWidth()/2) {
             return false;
         } else {
             return true;
@@ -207,7 +211,14 @@ public class Object {
     }
 
     public float getX() {
-        return x;
+        return startX;
+    }
+
+    public float getXScreen() {
+        if (_isHUD)
+            return x;
+        else
+            return x - camera.getCameraX();
     }
 
     public float getY() {
@@ -251,14 +262,6 @@ public class Object {
 
     public boolean getVisibility() {
         return visibility;
-    }
-
-    public float getXWithCamera() {
-        return x + camera.getCameraX();
-    }
-
-    public float getYWithCamera() {
-        return y;
     }
 
     public void coeffForParalax(float parallax) {
