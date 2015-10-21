@@ -44,6 +44,8 @@ public class Background extends Object {
 
     public Background(Scene scene, float x, float y, float width, float height, Texture texture, Camera camera) {
         super(scene, x, y, width, height, texture, camera);
+        super.widthN /= scale;
+        super.heightN /= scale;
         super.width = 1;
         super.height = 1;
         super.posXInAtlasN = 0;
@@ -85,5 +87,4 @@ public class Background extends Object {
         this.speedOfSlide = speedOfSlide;
         speedOfSlideN = this.speedOfSlide/texture.width;
     }
-
 }

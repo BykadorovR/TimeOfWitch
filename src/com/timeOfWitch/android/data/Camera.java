@@ -16,6 +16,9 @@ public class Camera {
     private float signOfSpeedCamera = 0;
     private float xCamera;
     private float yCamera;
+    private float referenceHeight = 540;
+    private float referenceWidth = referenceHeight * Initialization.realWidth/Initialization.realHeight;
+    private float scale = Initialization.realHeight/540f;
 
     public Camera(float posX, float posY) {
         camera = new float[16];
