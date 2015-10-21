@@ -69,6 +69,9 @@ public class Object {
     protected float posXInAtlasN;
     protected float posYInAtlasN;
     protected Camera camera;
+    protected float referenceHeight = 540;
+    protected float referenceWidth = referenceHeight * Initialization.realWidth/Initialization.realHeight;
+    protected float scale = Initialization.realHeight/540f;
 
     protected float[] matrix = new float[16];
     protected float[] scaleMatrix = new float[16];
@@ -88,16 +91,13 @@ public class Object {
         this.transparency = 1f;
         this.visibility = true;
         this.texture = texture;
-        this.heightN = height / Initialization.realHeight;
-        this.widthN = width / Initialization.realWidth;
+        this.heightN = scale * height / Initialization.realHeight;
+        this.widthN = scale * width / Initialization.realWidth;
         this.scene = scene;
         setIdentityM(translateMatrix,0);
         setIdentityM(scaleMatrix, 0);
         setIdentityM(parallaxMatrix, 0);
         setIdentityM(rotateMatrix, 0);
-
-
-
     }
 
     public void attach(int fragmentShader, int vertexShader) {
@@ -152,9 +152,16 @@ public class Object {
 
 
     public void translate(float posX, float posY) {
-        x = posX;
-        y = posY;
-
+        if  (_isHUD)
+        {
+            x += (posX - x)*scale;
+            y = posY;
+        }
+        else
+        {
+            x = posX;
+            y = posY;
+        }
     }
     private void calculatePosition() {
         float xWithAllModif;
@@ -169,7 +176,7 @@ public class Object {
                     //xWithAllModif += parallaxValue;
                 }
             }
-            xWithAllModif += parallaxValue - camera.getCameraX();
+            xWithAllModif = (xWithAllModif + parallaxValue - camera.getCameraX())*scale;
             float xN = xWithAllModif / Initialization.realWidth * 2 - 1;
             float yN = yWithAllModif / Initialization.realHeight * 2 - 1;
             setIdentityM(translateMatrix, 0);
@@ -197,7 +204,7 @@ public class Object {
 
 
     public boolean needToDisplay() {
-        if (getXScreen() < -getWidth()/2 || getXScreen() > Initialization.realWidth + getWidth()/2) {
+        if (getXScreen() < -scale*getWidth()/2 || getXScreen() > Initialization.realWidth + scale*getWidth()/2) {
             return false;
         } else {
             return true;
@@ -214,29 +221,25 @@ public class Object {
 
     public float getXScreen() {
         if (_isHUD)
-            return x;
+            return x + camera.getCameraX();
         else
-            return x + parallaxValue - camera.getCameraX();
+            return (x + parallaxValue - camera.getCameraX())*scale;
     }
 
     public float getY() {
         return y;
     }
 
-    public float getWidth() {
-        return widthN * Initialization.realWidth;
-    }
+    public float getWidth() { return widthN * Initialization.realWidth / scale; }
 
-    public float getHeight() {
-        return heightN * Initialization.realHeight;
-    }
+    public float getHeight() { return heightN * Initialization.realHeight / scale; }
 
     public void setWidth(float width){
-        this.widthN = width/Initialization.realWidth;
+        this.widthN = scale * width/Initialization.realWidth;
     }
 
     public void setHeight(float height){
-        this.heightN = height/Initialization.realHeight;
+        this.heightN = scale * height/Initialization.realHeight;
     }
 
     public float getScaleX() {
@@ -261,9 +264,5 @@ public class Object {
 
     public boolean getVisibility() { return visibility; }
 
-    public void coeffForParalax(float parallax) {
-        this.parallax = parallax;
-    }
-
-
+    public void coeffForParalax(float parallax) { this.parallax = parallax; }
 }

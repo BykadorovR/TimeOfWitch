@@ -46,7 +46,6 @@ public class Sprite extends Object {
         super.height = (float) texture.height / (float) atlas.height; //512/2048
         super.posXInAtlasN = (float) texture.posXInAtlas / (float) atlas.width; // = 513/2048
         super.posYInAtlasN = (float) texture.posYInAtlas / (float) atlas.height; // = 0/2048
-
     }
 
     private void initializeBuffer() {
