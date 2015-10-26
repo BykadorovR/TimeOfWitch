@@ -264,38 +264,38 @@ public class Render implements Renderer {
         }
         setSequenceAndPositionForBack();
         scene1.draw();
-
+        Log.d("myLogs", "backg = " + backg[3].getXScreen());
     }
 
     private boolean setSequenceAndPositionForBack() {
         float toRight, toLeft;
         boolean t = false;
-        toRight = Math.abs (Initialization.realWidth - back[3].getXScreen());
-        toLeft = Math.abs (back[0].getXScreen());
+        toRight = (Initialization.realWidth - back[3].getXScreen());
+        toLeft = (back[0].getXScreen());
 
-        if (toLeft < speedX || toRight < speedX) {
+        if (toLeft > speedX || toRight > speedX) {
 
-            if (toLeft < speedX) {
+            if (toLeft > speedX) {
                 back[3].translate(back[0].getX() - back[0].getWidth(), back[3].getY());
                 back = Geometry.shiftToRight(back, 1);
             }
-            if (toRight < speedX) {
+            if (toRight > speedX) {
                 back[0].translate(back[3].getX() + back[3].getWidth(), back[0].getY());
                 back = Geometry.shiftToLeft(back, 1);
             }
             t = true;
         }
 
-        toRight = Math.abs (Initialization.realWidth - backg[3].getXScreen());
-        toLeft = Math.abs (backg[0].getXScreen());
+        toRight = (Initialization.realWidth - backg[3].getXScreen());
+        toLeft = (backg[0].getXScreen());
 
-        if (toLeft < speedX || toRight < speedX) {
+        if (toLeft > speedX || toRight > speedX) {
 
-            if (toLeft < speedX) {
+            if (toLeft > speedX) {
                 backg[3].translate(backg[0].getX() - backg[0].getWidth(), backg[3].getY());
                 backg = Geometry.shiftToRight(backg, 1);
             }
-            if (toRight < speedX) {
+            if (toRight > speedX) {
                 backg[0].translate(backg[3].getX() + backg[3].getWidth(), backg[0].getY());
                 backg = Geometry.shiftToLeft(backg, 1);
             }
