@@ -79,7 +79,7 @@ public class Background extends Object {
         glUniform1i(uTextureUnitLocation, texture.getTextureUnit());
         glUniform1f(uSlideLocation, slide);
         if (slide==2) slide=0;
-        slide+=speedOfSlideN;
+        slide+=speedOfSlideN * Math.abs(camera.getCameraDiff()) / 3f;
         super.draw();
     }
 
