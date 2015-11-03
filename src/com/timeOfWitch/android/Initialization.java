@@ -175,7 +175,7 @@ public class Initialization extends Activity {
                             posMove[0][1] = event.getY(0) + location[1];
                             posMove[1][0] = event.getX(1) + location[0];
                             posMove[1][1] = event.getY(1) + location[1];
-                            touchHelper.drag(new float[][]{{posMove[0][0], posMove[0][1]},{posMove[1][0],posMove[1][1]}}, 1);  //��������   
+                            touchHelper.drag(new float[][]{{posMove[0][0], posMove[0][1]},{posMove[1][0],posMove[1][1]}}, 1);  //��������
                             }
                     break;
                     

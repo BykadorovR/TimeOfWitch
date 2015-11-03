@@ -48,6 +48,7 @@ public class Object {
     protected int textureColumn;
     protected Texture texture;
     protected float parallax;
+    protected float parallaxValue;
     protected Scene scene;
 
 
@@ -68,6 +69,9 @@ public class Object {
     protected float posXInAtlasN;
     protected float posYInAtlasN;
     protected Camera camera;
+    protected float referenceHeight = 540;
+    protected float referenceWidth = referenceHeight * Initialization.realWidth/Initialization.realHeight;
+    protected float scale = Initialization.realHeight/540f;
 
     protected float[] matrix = new float[16];
     protected float[] scaleMatrix = new float[16];
@@ -80,22 +84,20 @@ public class Object {
         this.x = x;
         this.y = y;
         this.parallax = 0;
+        this.parallaxValue = 0;
         this.context = Render.context;
         this.textureColumn = texture.column;
         this.camera = camera;
         this.transparency = 1f;
         this.visibility = true;
         this.texture = texture;
-        this.heightN = height / Initialization.realHeight;
-        this.widthN = width / Initialization.realWidth;
+        this.heightN = scale * height / Initialization.realHeight;
+        this.widthN = scale * width / Initialization.realWidth;
         this.scene = scene;
         setIdentityM(translateMatrix,0);
         setIdentityM(scaleMatrix, 0);
         setIdentityM(parallaxMatrix, 0);
         setIdentityM(rotateMatrix, 0);
-
-
-        setStartPosition(x, y);
     }
 
     public void attach(int fragmentShader, int vertexShader) {
@@ -117,15 +119,13 @@ public class Object {
     }
 
     public void draw() {
+        calculatePosition();
         setIdentityM(matrix, 0);
         if (!_isHUD) {
-            doParallax();
             multiplyMM(matrix, 0, translateMatrix, 0, rotateMatrix, 0);
             multiplyMM(matrix, 0, scaleMatrix, 0, matrix, 0);
-            multiplyMM(matrix, 0, camera.getCamera(), 0, matrix, 0);
             glUniformMatrix4fv(uMatrixLocation, 1, false, matrix, 0);
         } else {
-            doParallax();
             multiplyMM(matrix, 0, translateMatrix, 0, rotateMatrix, 0);
             multiplyMM(matrix, 0, scaleMatrix, 0, matrix, 0);
             glUniformMatrix4fv(uMatrixLocation, 1, false, matrix, 0);
@@ -133,7 +133,7 @@ public class Object {
         glUniform1f(uTransparency, transparency);
 
         buffer.position(0);
-        glVertexAttribPointer(aPositionLocation,  POSITION_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, buffer);
+        glVertexAttribPointer(aPositionLocation, POSITION_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, buffer);
         glEnableVertexAttribArray(aPositionLocation);
         buffer.position(0);
         buffer.position(POSITION_COMPONENT_COUNT);
@@ -142,6 +142,7 @@ public class Object {
         buffer.position(0);
         if (visibility)
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
     }
 
     public void attachHUD(int fragmentShader, int vertexShader) {
@@ -149,21 +150,44 @@ public class Object {
         attach(fragmentShader, vertexShader);
     }
 
-    public void setStartPosition(float posX, float posY) {
-        translate(posX, posY);
-    }
 
     public void translate(float posX, float posY) {
-
-        x = posX;
-        y = posY;
-        float xN = posX / Initialization.realWidth * 2 - 1;
-        float yN = posY / Initialization.realHeight * 2 - 1;
-        setIdentityM(translateMatrix, 0);
-        translateM(translateMatrix, 0, xN, yN, 0);
-
+        if  (_isHUD)
+        {
+            x += (posX - x)*scale;
+            y = posY;
+        }
+        else
+        {
+            x = posX;
+            y = posY;
+        }
     }
-
+    private void calculatePosition() {
+        float xWithAllModif;
+        float yWithAllModif;
+        xWithAllModif = x;
+        yWithAllModif = y;
+        if (!_isHUD) {
+            if (parallax != 0) {
+                if (camera.needMove()) {
+                    parallaxValue += parallax * camera.getSignOfSpeedCamera() * Math.abs(camera.getCameraDiff()) / 3f;
+                    //x += parallax * camera.getSignOfSpeedCamera();
+                    //xWithAllModif += parallaxValue;
+                }
+            }
+            xWithAllModif = (xWithAllModif + parallaxValue - camera.getCameraX())*scale;
+            float xN = xWithAllModif / Initialization.realWidth * 2 - 1;
+            float yN = yWithAllModif / Initialization.realHeight * 2 - 1;
+            setIdentityM(translateMatrix, 0);
+            translateM(translateMatrix, 0, xN, yN, 0);
+        } else {
+            float xN = xWithAllModif / Initialization.realWidth * 2 - 1;
+            float yN = yWithAllModif / Initialization.realHeight * 2 - 1;
+            setIdentityM(translateMatrix, 0);
+            translateM(translateMatrix, 0, xN, yN, 0);
+        }
+    }
 
     public void setScale(float x, float y) {
         scaleX = x;
@@ -178,31 +202,13 @@ public class Object {
         setRotateM(rotateMatrix, 0, angle, x, y, z);
     }
 
-    private  void doParallax() {
-        if (parallax != 0) {
-            //Log.d("myLogs", x + " x");
-            if (camera.needMove()) {
-                //Log.d("myLogs", x + " x");
-                x = x + parallax * camera.getSignOfSpeedCamera();
-                translate(x, y);
-                float xN = x / Initialization.realWidth * 2 - 1;
 
-                setIdentityM(parallaxMatrix, 0);
-                translateM(parallaxMatrix, 0, xN, 0, 0);
-
-            }
-            multiplyMM(translateMatrix, 0, matrix, 0,translateMatrix, 0);
-
-        }
-    }
     public boolean needToDisplay() {
-        //Here Initialization.realWidth - is real camera "width"
-        if (Math.abs(camera.getCameraX()-x) > Initialization.realWidth/2 + getWidth()/2) {
+        if (getXScreen() < -scale*getWidth()/2 || getXScreen() > Initialization.realWidth + scale*getWidth()/2) {
             return false;
         } else {
             return true;
         }
-
     }
 
     public int getAngle() {
@@ -213,23 +219,27 @@ public class Object {
         return x;
     }
 
+    public float getXScreen() {
+        if (_isHUD)
+            return x + camera.getCameraX();
+        else
+            return (x + parallaxValue - camera.getCameraX())*scale;
+    }
+
     public float getY() {
         return y;
     }
 
-    public float getWidth() {
-        return widthN * Initialization.realWidth;
-    }
+    public float getWidth() { return widthN * Initialization.realWidth / scale; }
 
-    public float getHeight() {
-        return heightN * Initialization.realHeight;
-    }
+    public float getHeight() { return heightN * Initialization.realHeight / scale; }
 
     public void setWidth(float width){
-        this.widthN = width/Initialization.realWidth;
+        this.widthN = scale * width/Initialization.realWidth;
     }
+
     public void setHeight(float height){
-        this.heightN = height/Initialization.realHeight;
+        this.heightN = scale * height/Initialization.realHeight;
     }
 
     public float getScaleX() {
@@ -252,21 +262,7 @@ public class Object {
         this.visibility = visibility;
     }
 
-    public boolean getVisibility() {
-        return visibility;
-    }
+    public boolean getVisibility() { return visibility; }
 
-    public float getXWithCamera() {
-        return x + camera.getCameraXMoved();
-    }
-
-    public float getYWithCamera() {
-        return y;
-    }
-
-    public void coeffForParalax(float parallax) {
-        this.parallax = parallax;
-    }
-
-
+    public void coeffForParalax(float parallax) { this.parallax = parallax; }
 }
