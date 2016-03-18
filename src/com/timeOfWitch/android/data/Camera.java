@@ -16,6 +16,7 @@ public class Camera {
     private float signOfSpeedCamera = 0;
     private float xCamera;
     private float yCamera;
+    private float diffOfCameraX = 0;
 
     public Camera(float posX, float posY) {
         camera = new float[16];
@@ -27,7 +28,7 @@ public class Camera {
     //translateM - translate current x and y to diff so newX = x + diff; newY = y + diff; if diff is no positive translating will be to left
     public void translate(float xCamera, float yCamera) {
         if (needOfMovement) {
-            float diffOfCameraX = xCamera - this.xCamera;
+            diffOfCameraX = xCamera - this.xCamera;
             this.xCamera = xCamera;
             this.yCamera = yCamera;
             signOfSpeedCamera = Math.signum(diffOfCameraX);
@@ -55,5 +56,7 @@ public class Camera {
     public float getCameraY() {
         return yCamera;
     }
+
+    public float getCameraDiff() {return diffOfCameraX;}
 
 }

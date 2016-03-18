@@ -171,7 +171,7 @@ public class Object {
         if (!_isHUD) {
             if (parallax != 0) {
                 if (camera.needMove()) {
-                    parallaxValue += parallax * camera.getSignOfSpeedCamera();
+                    parallaxValue += parallax * camera.getSignOfSpeedCamera() * Math.abs(camera.getCameraDiff()) / 3f;
                     //x += parallax * camera.getSignOfSpeedCamera();
                     //xWithAllModif += parallaxValue;
                 }
